@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel | Execurive Roleplay</title>
+
+<style>
+:root{
+  --bg:#020617;
+  --card:#0b1633;
+  --card2:#0f1f45;
+  --border:#1e3a8a;
+  --text:#e5e7eb;
+  --muted:#9ca3af;
+  --accent:#38bdf8;
+  --red:#ef4444;
+}
+
+*{box-sizing:border-box;font-family:Segoe UI,system-ui}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(60% 40% at 50% 0%,rgba(56,189,248,.08),transparent),
+    linear-gradient(180deg,#020617,#020b1e);
+  color:var(--text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* CARD */
+.card{
+  width:100%;
+  max-width:420px;
+  background:linear-gradient(180deg,var(--card),var(--card2));
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:26px;
+  box-shadow:0 20px 60px rgba(2,6,23,.6);
+}
+
+h1{
+  margin:0 0 18px;
+  text-align:center;
+  color:var(--accent);
+  letter-spacing:.5px;
+}
+
+input,select,button{
+  width:100%;
+  margin-bottom:14px;
+  padding:12px;
+  border-radius:12px;
+  border:none;
+  font-size:14px;
+}
+
+input,select{
+  background:#020b1e;
+  color:var(--text);
+  border:1px solid var(--border);
+}
+
+button{
+  background:var(--accent);
+  color:#020617;
+  font-weight:700;
+  cursor:pointer;
+  transition:.2s;
+}
+
+button:hover{
+  opacity:.9;
+}
+
+.logout{
+  background:var(--red);
+  color:#fff;
+}
+
+small{
+  display:block;
+  margin-top:8px;
+  color:var(--muted);
+  text-align:center;
+  font-size:12px;
+}
+
+.hidden{display:none}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="card" id="loginBox">
+  <h1>Admin Login</h1>
+  <input id="user" placeholder="Username">
+  <input id="pass" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+  <small>Unauthorized access prohibited</small>
+</div>
+
+<!-- PANEL -->
+<div class="card hidden" id="panel">
+  <h1>Server Control</h1>
+
+  <select id="status">
+    <option>ONLINE</option>
+    <option>OFFLINE</option>
+  </select>
+
+  <input id="players" type="number" placeholder="Players Online">
+  <input id="maxPlayers" type="number" placeholder="Max Players">
+  <input id="peak" type="number" placeholder="Peak Today">
+  <input id="gamemode" placeholder="Gamemode">
+  <input id="ip" placeholder="Server IP">
+
+  <button onclick="generate()">Generate server.json</button>
+  <button class="logout" onclick="logout()">Logout</button>
+
+  <small>
+    Download hasilnya lalu upload ke <b>/data/server.json</b>
+  </small>
+</div>
+
+<!-- HASH LIBRARY (WAJIB) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<script src="admin.js"></script>
+
+</body>
+</html>

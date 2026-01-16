@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Execurive RP | Admin Panel</title>
+<title>Execurive RP | Admin</title>
 
 <style>
 :root{
@@ -40,7 +40,7 @@ body{
 #fake404 h1{
   font-size:80px;
   margin:0;
-  color:#ef4444;
+  color:var(--red);
 }
 #fake404 p{
   color:var(--muted);
@@ -55,7 +55,7 @@ body{
   border-radius:20px;
   padding:28px;
   box-shadow:0 30px 80px rgba(0,0,0,.6);
-  animation:fade .5s ease;
+  animation:fade .4s ease;
 }
 
 @keyframes fade{
@@ -91,17 +91,6 @@ button{
   cursor:pointer;
 }
 
-.toggle{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:16px;
-}
-
-.toggle span{
-  font-weight:600;
-}
-
 .logout{
   background:var(--red);
   color:white;
@@ -134,9 +123,9 @@ small{
 <!-- LOGIN -->
 <div class="card hidden" id="loginBox">
   <h1>Admin Login</h1>
-  <input id="user" placeholder="Username">
+  <input id="user" placeholder="Username" autocomplete="off">
   <input id="pass" type="password" placeholder="Password">
-  <button onclick="login()">Login</button>
+  <button id="loginBtn">Login</button>
   <small>Authorized personnel only</small>
 </div>
 
@@ -144,27 +133,24 @@ small{
 <div class="card hidden" id="panel">
   <h1>Server Control</h1>
 
-  <div class="toggle">
-    <span>Status</span>
-    <select id="status">
-      <option value="ONLINE">ONLINE</option>
-      <option value="OFFLINE">OFFLINE</option>
-    </select>
-  </div>
+  <select id="status">
+    <option value="ONLINE">ONLINE</option>
+    <option value="OFFLINE">OFFLINE</option>
+  </select>
 
-  <input id="players" type="number" placeholder="Players Online">
-  <input id="maxPlayers" type="number" placeholder="Max Players">
-  <input id="peak" type="number" placeholder="Peak Today">
+  <input id="players" type="number" min="0" placeholder="Players Online">
+  <input id="maxPlayers" type="number" min="0" placeholder="Max Players">
+  <input id="peak" type="number" min="0" placeholder="Peak Today">
   <input id="gamemode" placeholder="Gamemode">
   <input id="ip" placeholder="Server IP">
 
-  <button onclick="generate()">Generate server.json</button>
-  <button class="logout" onclick="logout()">Logout</button>
+  <button id="saveBtn">Generate server.json</button>
+  <button class="logout" id="logoutBtn">Logout</button>
 
-  <small>Auto update time • Upload hasil ke /data/server.json</small>
+  <small>Auto update time • Upload ke /data/server.json</small>
 </div>
 
-<!-- SHA-256 -->
+<!-- HASH LIBRARY -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 <script src="admin.js"></script>
 

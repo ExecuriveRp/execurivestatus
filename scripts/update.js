@@ -1,0 +1,32 @@
+import Gamedig from "gamedig";
+import fs from "fs";
+
+const server = {
+  type: "samp",
+  host: "104.234.180.117",
+  port: 7006
+};
+
+try {
+  const state = await Gamedig.query(server);
+
+  const data = {
+    status: "ONLINE",
+    players: state.players.length,
+    maxPlayers: state.maxplayers,
+    peak: state.players.length,
+    gamemode: state.gamemode,
+    updated: new Date().toLocaleString("id-ID")
+  };
+
+  fs.writeFileSync("data/server.json", JSON.stringify(data, null, 2));
+} catch {
+  fs.writeFileSync("data/server.json", JSON.stringify({
+    status: "OFFLINE",
+    players: 0,
+    maxPlayers: 0,
+    peak: 0,
+    gamemode: "Roleplay",
+    updated: new Date().toLocaleString("id-ID")
+  }, null, 2));
+}

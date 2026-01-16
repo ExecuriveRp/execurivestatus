@@ -7,26 +7,37 @@ const server = {
   port: 7006
 };
 
-try {
-  const state = await Gamedig.query(server);
+async function main() {
+  try {
+    const state = await Gamedig.query(server);
 
-  const data = {
-    status: "ONLINE",
-    players: state.players.length,
-    maxPlayers: state.maxplayers,
-    peak: state.players.length,
-    gamemode: state.gamemode,
-    updated: new Date().toLocaleString("id-ID")
-  };
+    const data = {
+      status: "ONLINE",
+      players: state.players.length,
+      maxPlayers: state.maxplayers,
+      peak: state.players.length,
+      gamemode: state.gamemode || "Roleplay",
+      updated: new Date().toLocaleString("id-ID")
+    };
 
-  fs.writeFileSync("data/server.json", JSON.stringify(data, null, 2));
-} catch {
-  fs.writeFileSync("data/server.json", JSON.stringify({
-    status: "OFFLINE",
-    players: 0,
-    maxPlayers: 0,
-    peak: 0,
-    gamemode: "Roleplay",
-    updated: new Date().toLocaleString("id-ID")
-  }, null, 2));
+    fs.writeFileSync(
+      "data/server.json",
+      JSON.stringify(data, null, 2)
+    );
+
+  } catch (err) {
+    fs.writeFileSync(
+      "data/server.json",
+      JSON.stringify({
+        status: "OFFLINE",
+        players: 0,
+        maxPlayers: 0,
+        peak: 0,
+        gamemode: "Roleplay",
+        updated: new Date().toLocaleString("id-ID")
+      }, null, 2)
+    );
+  }
 }
+
+main();

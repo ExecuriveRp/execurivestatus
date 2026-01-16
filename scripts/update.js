@@ -1,5 +1,5 @@
-import Gamedig from "gamedig";
-import fs from "fs";
+const Gamedig = require("gamedig");
+const fs = require("fs");
 
 const server = {
   type: "samp",
@@ -7,7 +7,7 @@ const server = {
   port: 7006
 };
 
-async function main() {
+(async () => {
   try {
     const state = await Gamedig.query(server);
 
@@ -25,6 +25,8 @@ async function main() {
       JSON.stringify(data, null, 2)
     );
 
+    console.log("Server status updated");
+
   } catch (err) {
     fs.writeFileSync(
       "data/server.json",
@@ -37,7 +39,7 @@ async function main() {
         updated: new Date().toLocaleString("id-ID")
       }, null, 2)
     );
-  }
-}
 
-main();
+    console.log("Server offline or query failed");
+  }
+})();

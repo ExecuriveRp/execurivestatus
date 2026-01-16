@@ -2,31 +2,28 @@ async function login(){
   const u = document.getElementById("username").value.trim()
   const p = document.getElementById("password").value
 
-  if(!u || !p){
-    alert("Username / password kosong")
-    return
-  }
-
   try{
-    const res = await fetch("data/admin.json?v=" + Date.now())
-    const data = await res.json()
+    const r = await fetch("data/admin.json?v="+Date.now())
+    const d = await r.json()
 
-    const hash = CryptoJS.SHA256(p).toString()
+    const h = CryptoJS.SHA256(p).toString()
 
-    const user = data.users.find(x =>
-      x.username === u && x.password === hash
-    )
+    console.log("USER:", u)
+    console.log("HASH:", h)
+    console.log("DATA:", d)
 
-    if(!user){
-      alert("Username atau password salah")
+    const ok = d.users.find(x => x.username === u && x.password === h)
+
+    if(!ok){
+      alert("Login gagal")
       return
     }
 
-    localStorage.setItem("adminLogin","true")
+    localStorage.setItem("adminLogin","1")
     location.href = "panel.html"
 
   }catch(e){
-    alert("Gagal load admin.json")
+    alert("Error load admin")
     console.error(e)
   }
 }

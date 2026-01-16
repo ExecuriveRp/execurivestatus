@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel | Execurive Roleplay</title>
+<title>Execurive RP | Admin Panel</title>
 
 <style>
 :root{
@@ -14,6 +14,7 @@
   --text:#e5e7eb;
   --muted:#9ca3af;
   --accent:#38bdf8;
+  --green:#22c55e;
   --red:#ef4444;
 }
 
@@ -23,12 +24,26 @@ body{
   margin:0;
   min-height:100vh;
   background:
-    radial-gradient(60% 40% at 50% 0%,rgba(56,189,248,.08),transparent),
+    radial-gradient(60% 40% at 50% 0%,rgba(56,189,248,.12),transparent),
     linear-gradient(180deg,#020617,#020b1e);
   color:var(--text);
   display:flex;
   align-items:center;
   justify-content:center;
+}
+
+/* FAKE 404 */
+#fake404{
+  display:none;
+  text-align:center;
+}
+#fake404 h1{
+  font-size:80px;
+  margin:0;
+  color:#ef4444;
+}
+#fake404 p{
+  color:var(--muted);
 }
 
 /* CARD */
@@ -37,23 +52,28 @@ body{
   max-width:420px;
   background:linear-gradient(180deg,var(--card),var(--card2));
   border:1px solid var(--border);
-  border-radius:18px;
-  padding:26px;
-  box-shadow:0 20px 60px rgba(2,6,23,.6);
+  border-radius:20px;
+  padding:28px;
+  box-shadow:0 30px 80px rgba(0,0,0,.6);
+  animation:fade .5s ease;
+}
+
+@keyframes fade{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:none}
 }
 
 h1{
-  margin:0 0 18px;
   text-align:center;
+  margin-bottom:20px;
   color:var(--accent);
-  letter-spacing:.5px;
 }
 
 input,select,button{
   width:100%;
-  margin-bottom:14px;
   padding:12px;
-  border-radius:12px;
+  margin-bottom:14px;
+  border-radius:14px;
   border:none;
   font-size:14px;
 }
@@ -69,49 +89,68 @@ button{
   color:#020617;
   font-weight:700;
   cursor:pointer;
-  transition:.2s;
 }
 
-button:hover{
-  opacity:.9;
+.toggle{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:16px;
+}
+
+.toggle span{
+  font-weight:600;
 }
 
 .logout{
   background:var(--red);
-  color:#fff;
+  color:white;
 }
+
+.hidden{display:none}
 
 small{
   display:block;
   margin-top:8px;
-  color:var(--muted);
   text-align:center;
-  font-size:12px;
+  color:var(--muted);
 }
 
-.hidden{display:none}
+/* MOBILE */
+@media(max-width:480px){
+  .card{margin:20px}
+}
 </style>
 </head>
 
 <body>
 
+<!-- FAKE 404 -->
+<div id="fake404">
+  <h1>404</h1>
+  <p>Page not found</p>
+</div>
+
 <!-- LOGIN -->
-<div class="card" id="loginBox">
+<div class="card hidden" id="loginBox">
   <h1>Admin Login</h1>
   <input id="user" placeholder="Username">
   <input id="pass" type="password" placeholder="Password">
   <button onclick="login()">Login</button>
-  <small>Unauthorized access prohibited</small>
+  <small>Authorized personnel only</small>
 </div>
 
 <!-- PANEL -->
 <div class="card hidden" id="panel">
   <h1>Server Control</h1>
 
-  <select id="status">
-    <option>ONLINE</option>
-    <option>OFFLINE</option>
-  </select>
+  <div class="toggle">
+    <span>Status</span>
+    <select id="status">
+      <option value="ONLINE">ONLINE</option>
+      <option value="OFFLINE">OFFLINE</option>
+    </select>
+  </div>
 
   <input id="players" type="number" placeholder="Players Online">
   <input id="maxPlayers" type="number" placeholder="Max Players">
@@ -122,12 +161,10 @@ small{
   <button onclick="generate()">Generate server.json</button>
   <button class="logout" onclick="logout()">Logout</button>
 
-  <small>
-    Download hasilnya lalu upload ke <b>/data/server.json</b>
-  </small>
+  <small>Auto update time • Upload hasil ke /data/server.json</small>
 </div>
 
-<!-- HASH LIBRARY (WAJIB) -->
+<!-- SHA-256 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 <script src="admin.js"></script>
 

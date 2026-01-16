@@ -1,89 +1,89 @@
-const LOGIN_KEY = "execurive_admin_login";
+const KEY = "execurive_admin_login";
 
-/* AUTO LOGIN */
-if(localStorage.getItem(LOGIN_KEY)){
+/* INIT */
+if(localStorage.getItem(KEY)){
   showPanel();
+}else{
+  showLogin();
 }
 
-/* HASH */
-function hash(str){
-  return CryptoJS.MD5(str).toString();
+/* HASH SHA-256 */
+function hash(v){
+  return CryptoJS.SHA256(v).toString();
 }
 
 /* LOGIN */
 function login(){
-  const u = document.getElementById("user").value.trim();
-  const p = document.getElementById("pass").value;
-
-  if(!u || !p){
-    alert("Lengkapi username & password");
-    return;
-  }
+  const u = user.value.trim();
+  const p = pass.value;
 
   fetch("data/admin.json")
     .then(r=>r.json())
     .then(d=>{
       const hp = hash(p);
-      const ok = d.users.find(x => x.username === u && x.password === hp);
-
+      const ok = d.users.find(x=>x.username===u && x.password===hp);
       if(ok){
-        localStorage.setItem(LOGIN_KEY,"1");
+        localStorage.setItem(KEY,"1");
         showPanel();
       }else{
         alert("Login gagal");
       }
     })
     .catch(()=>{
-      alert("admin.json tidak ditemukan");
+      alert("admin.json not found");
     });
+}
+
+/* SHOW LOGIN */
+function showLogin(){
+  fake404.style.display="none";
+  loginBox.classList.remove("hidden");
 }
 
 /* SHOW PANEL */
 function showPanel(){
-  document.getElementById("loginBox").classList.add("hidden");
-  document.getElementById("panel").classList.remove("hidden");
+  fake404.style.display="none";
+  loginBox.classList.add("hidden");
+  panel.classList.remove("hidden");
   loadServer();
 }
 
-/* LOGOUT */
+/* FAKE 404 */
 function logout(){
-  localStorage.removeItem(LOGIN_KEY);
-  location.reload();
+  localStorage.removeItem(KEY);
+  panel.classList.add("hidden");
+  fake404.style.display="block";
 }
 
-/* LOAD SERVER DATA */
+/* LOAD SERVER */
 function loadServer(){
   fetch("data/server.json")
     .then(r=>r.json())
     .then(d=>{
-      status.value = d.status || "OFFLINE";
-      players.value = d.players || 0;
-      maxPlayers.value = d.maxPlayers || 0;
-      peak.value = d.peak || 0;
-      gamemode.value = d.gamemode || "";
-      ip.value = d.ip || "";
+      status.value=d.status;
+      players.value=d.players;
+      maxPlayers.value=d.maxPlayers;
+      peak.value=d.peak;
+      gamemode.value=d.gamemode;
+      ip.value=d.ip;
     });
 }
 
-/* GENERATE JSON */
+/* GENERATE */
 function generate(){
-  const data = {
-    status: status.value,
-    players: Number(players.value),
-    maxPlayers: Number(maxPlayers.value),
-    peak: Number(peak.value),
-    gamemode: gamemode.value,
-    ip: ip.value,
-    updated: new Date().toLocaleString("id-ID")
+  const data={
+    status:status.value,
+    players:+players.value,
+    maxPlayers:+maxPlayers.value,
+    peak:+peak.value,
+    gamemode:gamemode.value,
+    ip:ip.value,
+    updated:new Date().toLocaleString("id-ID")
   };
 
-  const blob = new Blob(
-    [JSON.stringify(data,null,2)],
-    {type:"application/json"}
-  );
-
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "server.json";
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="server.json";
   a.click();
 }

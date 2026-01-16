@@ -1,44 +1,30 @@
-const Gamedig = require("gamedig");
-const fs = require("fs");
+name: Update Server Status
 
-const server = {
-  type: "samp",
-  host: "104.234.180.117",
-  port: 7006
-};
+permissions:
+  contents: write
 
-(async () => {
-  try {
-    const state = await Gamedig.query(server);
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
 
-    const data = {
-      status: "ONLINE",
-      players: state.players.length,
-      maxPlayers: state.maxplayers,
-      peak: state.players.length,
-      gamemode: state.gamemode || "Roleplay",
-      updated: new Date().toLocaleString("id-ID")
-    };
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-    fs.writeFileSync(
-      "data/server.json",
-      JSON.stringify(data, null, 2)
-    );
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-    console.log("Server status updated");
-  } catch (err) {
-    fs.writeFileSync(
-      "data/server.json",
-      JSON.stringify({
-        status: "OFFLINE",
-        players: 0,
-        maxPlayers: 0,
-        peak: 0,
-        gamemode: "Roleplay",
-        updated: new Date().toLocaleString("id-ID")
-      }, null, 2)
-    );
+      - run: npm install gamedig
 
-    console.log("Server offline or query failed");
-  }
-})();
+      - run: node scripts/update.js
+
+      - run: |
+          git config user.name "Execurive Bot"
+          git config user.email "bot@github.com"
+          git add data/server.json
+          git commit -m "Auto update server status" || exit 0
+          git push

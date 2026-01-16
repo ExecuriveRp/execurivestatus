@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Execurive Roleplay | Server Status</title>
+
+<style>
+:root{
+  --bg:#020617;
+  --card:#0b1633;
+  --card2:#0f1f45;
+  --border:#1e3a8a;
+  --text:#e5e7eb;
+  --muted:#9ca3af;
+  --accent:#38bdf8;
+  --green:#22c55e;
+  --red:#ef4444;
+}
+
+*{box-sizing:border-box;font-family:Segoe UI,system-ui}
+
+body{
+  margin:0;
+  background:linear-gradient(180deg,#020617,#020b1e);
+  color:var(--text);
+}
+
+header{
+  padding:28px 20px;
+  text-align:center;
+}
+
+header h1{
+  margin:0;
+  font-size:30px;
+  color:var(--accent);
+}
+
+header p{
+  margin-top:6px;
+  color:var(--muted);
+}
+
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:20px;
+}
+
+.card{
+  background:linear-gradient(180deg,var(--card),var(--card2));
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 0 30px rgba(56,189,248,.05);
+}
+
+.card h3{
+  margin:0 0 10px;
+  font-size:14px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+.value{
+  font-size:28px;
+  font-weight:700;
+}
+
+.online{color:var(--green)}
+.offline{color:var(--red)}
+
+.footer{
+  text-align:center;
+  padding:30px 10px;
+  color:var(--muted);
+  font-size:13px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Execurive Roleplay</h1>
+  <p>San Andreas Multiplayer Roleplay Server</p>
+</header>
+
+<section class="container">
+
+  <div class="card">
+    <h3>Status</h3>
+    <div id="status" class="value">Loading...</div>
+  </div>
+
+  <div class="card">
+    <h3>Players Online</h3>
+    <div id="players" class="value">-</div>
+  </div>
+
+  <div class="card">
+    <h3>Peak Today</h3>
+    <div id="peak" class="value">-</div>
+  </div>
+
+  <div class="card">
+    <h3>Gamemode</h3>
+    <div id="gamemode" class="value">-</div>
+  </div>
+
+  <div class="card">
+    <h3>Server IP</h3>
+    <div id="ip" class="value">104.234.180.117:7006</div>
+  </div>
+
+  <div class="card">
+    <h3>Last Update</h3>
+    <div id="updated" class="value">-</div>
+  </div>
+
+</section>
+
+<div class="footer">
+  © 2026 Execurive Roleplay
+</div>
+
+<script>
+fetch("data/server.json")
+  .then(r => r.json())
+  .then(d => {
+    const statusEl = document.getElementById("status");
+    statusEl.textContent = d.status;
+    statusEl.className = "value " + (d.status === "ONLINE" ? "online" : "offline");
+
+    document.getElementById("players").textContent =
+      d.players + " / " + d.maxPlayers;
+
+    document.getElementById("peak").textContent = d.peak;
+    document.getElementById("gamemode").textContent = d.gamemode;
+    document.getElementById("updated").textContent = d.updated;
+  })
+  .catch(()=>{
+    document.getElementById("status").textContent = "OFFLINE";
+    document.getElementById("status").className = "value offline";
+  });
+</script>
+
+</body>
+</html>

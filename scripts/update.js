@@ -26,7 +26,6 @@ const server = {
     );
 
     console.log("Server status updated");
-
   } catch (err) {
     fs.writeFileSync(
       "data/server.json",
